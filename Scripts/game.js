@@ -14,7 +14,7 @@ var paddle640, paddle360, paddleDepth, paddleQuality, paddle1DirY = 0, paddle2Di
 var ball, ball2,ball3,ball4, paddle1, paddle2, ballDirX = 1, ballDirY = 0, ball2DirX = 1, ball2DirY = 0,ball3DirX = -1, ball3DirY = 0,ball4DirX = -1, ball4DirY = 0, ballSpeed = 0;
 
 // game-related variables
-var score1 = 0, score2 = 0, maxScore = 10, paused=false,start=false,tempoEspera=200;
+var score1 = 0, score2 = 0, maxScore = 7, paused=false,start=false,tempoEspera=200;
 var antBallSpeed,antPaddleSpeed;
 var mouse = { x: 0, y: 0 },LOOKSPEED = 0.075,controls,clock;
 

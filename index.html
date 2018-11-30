@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Air Hockey</title>
+		<style>
+			body {
+				background-color: black;
+			}
+			#gameCanvas {
+				background-color: black;
+				width: 640px;
+				height: 360px;
+				margin: auto;
+				align: center;
+			}
+			#scoreboard {
+				text-align: center;
+				font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
+				color: white;
+			}
+			#scores {
+				font-size:600%; 
+				padding:0; 
+				margin:0;
+				color: white;
+			}
+			#title {
+				background-color: white;
+				color: black;
+			}
+		</style>
+	</head>
+	<body onload='setup();'>
+		<div id='gameCanvas'></div>
+		<script src='./three.min.js'></script>
+		<script src='./Scripts/keyboard.js'></script>
+		<script src='./Scripts/OrbitControls.js'></script>
+		<script src='./Scripts/FirstPersonControls.js'></script>
+		<script src='./Scripts/OBJLoader.js'></script>
+		<script src='./Scripts/MTLLoader.js'></script>
+		<script src='./Scripts/STLLoader.js'></script>
+		<script src='./Scripts/game.js'></script>
+		
+
+		
+		<div id='scoreboard'>
+			<h1 id='scores'>Pressione R para comecar!</h1>
+			<h1 id='title'>AIR HOCKEY</h1>
+			<h2 id='winnerBoard'>7 gols pra vitoria!</h2>
+			<h3>A - J1 esquerda
+			<br>D - J1 direita
+			<br>W - J1 cima
+			<br>S - J1 baixo
+			<br>
+			<br>J - J2 esquerda
+			<br>L - J2 direita
+			<br>I - J2 cima
+			<br>S - J2 baixo
+			<br>
+			<br>C - mudar camera (e controles)
+			<br>L - alternar entre modo normal e noturno
+			<br>P - pausar
+			<br>R - reiniciar (depois de comecar)</h3>
+		</div>
+	</body>
+</html>

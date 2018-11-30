@@ -1,5 +1,5 @@
 // scene object variables
-var renderer, scene, camera, cameraTop, pointLight, spotLight,listener,sound,audioLoader;
+var renderer, scene, camera, cameraTop, pointLight, spotLight,listener,golsound,audioLoader,bgsound, paredesound,hitsound,winsound;
 
 // mudanças camera
 var camAtual,camAnt,cameraController, cima1=87,baix1=83,esq1=65,dir1=68,cima2=85,baix2=74,esq2=72,dir2=75,ganhadoratual=2;
@@ -57,11 +57,15 @@ function createScene()
 	camera.add( listener );
 
 	// create a global audio source
-	sound = new THREE.Audio( listener );
+	golsound = new THREE.Audio( listener );
+	bgsound = new THREE.Audio( listener );
+	paredesound = new THREE.Audio( listener );
+	hitsound = new THREE.Audio( listener );
+	winsound = new THREE.Audio( listener );
+	scene.add(audioLoader,bgsound, paredesound,hitsound,winsound);
 
 	// load a sound and set it as the Audio object's buffer
 	audioLoader = new THREE.AudioLoader();
-	
 	
 	// cameraController = new THREE.OrbitControls(camAtual,c);
 	// cameraController.center = new THREE.Vector3(10 * 4, 0, 10 * 4);
@@ -235,6 +239,8 @@ function createScene()
     scene.add(spotLight);
 	
 	renderer.shadowMap.enabled = true;		
+	
+	somTorcida();
 }
 
 function draw()
@@ -267,6 +273,7 @@ function draw()
 				ballSpeed=2;
 				document.getElementById("scores").innerHTML = score1 + "-" + score2;
 				}, tempoEspera/2);
+				winsound.stop();
 			}else{
 				setTimeout(function(){
 				start = false;
@@ -873,6 +880,7 @@ function matchScoreCheck()
 {
 	if (score1 >= maxScore)
 	{
+		somVitoria();
 		ballSpeed = 0;
 		if(ganhadoratual==1){
 			ganhadoratual=2;	
@@ -891,6 +899,7 @@ function matchScoreCheck()
 	}
 	else if (score2 >= maxScore)
 	{
+		somVitoria();
 		ballSpeed = 0;
 		winner=0;
 		if(ganhadoratual==1){
@@ -961,25 +970,91 @@ function setCam(ganha) {
 
 function somGol(){
 	audioLoader.load( 'sounds/goal.ogg', function( buffer ) {
-		sound.setBuffer( buffer );
-		sound.setLoop( false );
-		sound.setVolume( 0.5 );
-		sound.play();
+		golsound.setBuffer( buffer );
+		golsound.setLoop( false );
+		golsound.setVolume( 0.5 );
+		golsound.play();
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.log( 'An error happened' );
 	});
 }
 function somParede(){
 	audioLoader.load( 'sounds/edge.ogg', function( buffer ) {
-		sound.setBuffer( buffer );
-		sound.setLoop( false );
-		sound.setVolume( 0.5 );
-		sound.play();
+		paredesound.setBuffer( buffer );
+		paredesound.setLoop( false );
+		paredesound.setVolume( 0.5 );
+		paredesound.play();
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.log( 'An error happened' );
 	});
 }
 function somColisao(){
 	audioLoader.load( 'sounds/hit.ogg', function( buffer ) {
-		sound.setBuffer( buffer );
-		sound.setLoop( false );
-		sound.setVolume( 0.5 );
-		sound.play();
+		hitsound.setBuffer( buffer );
+		hitsound.setLoop( false );
+		hitsound.setVolume( 0.5 );
+		hitsound.play();
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.log( 'An error happened' );
+	});
+}
+function somTorcida(){
+	audioLoader.load( 'sounds/crowd.mp3', function( buffer ) {
+		bgsound.setBuffer( buffer );
+		bgsound.setLoop( true );
+		bgsound.setVolume( 0.35 );
+		bgsound.play();
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.log( 'An error happened' );
+	});
+}
+function somVitoria(){
+	audioLoader.load( 'sounds/cheers.mp3', function( buffer ) {
+		winsound.setBuffer( buffer );
+		winsound.setLoop( false );
+		winsound.setVolume( 0.7 );
+		winsound.play();
+	},
+
+	// onProgress callback
+	function ( xhr ) {
+		console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+	},
+
+	// onError callback
+	function ( err ) {
+		console.log( 'An error happened' );
 	});
 }

@@ -1,5 +1,5 @@
 // scene object variables
-var renderer, scene, camera, cameraTop, pointLight, spotLight;
+var renderer, scene, camera, cameraTop, pointLight, spotLight,listener,sound,audioLoader;
 
 // mudanças camera
 var camAtual,camAnt,cameraController, cima1=87,baix1=83,esq1=65,dir1=68,cima2=85,baix2=74,esq2=72,dir2=75,ganhadoratual=2;
@@ -14,7 +14,7 @@ var paddle640, paddle360, paddleDepth, paddleQuality, paddle1DirY = 0, paddle2Di
 var ball, ball2,ball3,ball4, paddle1, paddle2, ballDirX = 1, ballDirY = 0, ball2DirX = 1, ball2DirY = 0,ball3DirX = -1, ball3DirY = 0,ball4DirX = -1, ball4DirY = 0, ballSpeed = 0;
 
 // game-related variables
-var score1 = 0, score2 = 0, maxScore = 7, paused=false,start=false,tempoEspera=200;
+var score1 = 0, score2 = 0, maxScore = 10, paused=false,start=false,tempoEspera=200;
 var antBallSpeed,antPaddleSpeed;
 var mouse = { x: 0, y: 0 },LOOKSPEED = 0.075,controls,clock;
 
@@ -51,6 +51,17 @@ function createScene()
 	cameraTop.position.z = 320;
 	cameraTop.position.y = 0;
 	cameraTop.position.x = 0;
+	
+	// create an AudioListener and add it to the camera
+	listener = new THREE.AudioListener();
+	camera.add( listener );
+
+	// create a global audio source
+	sound = new THREE.Audio( listener );
+
+	// load a sound and set it as the Audio object's buffer
+	audioLoader = new THREE.AudioLoader();
+	
 	
 	// cameraController = new THREE.OrbitControls(camAtual,c);
 	// cameraController.center = new THREE.Vector3(10 * 4, 0, 10 * 4);
@@ -353,6 +364,7 @@ function ballPhysics()
 {
 	if (ball.position.x <= -field640/2)
 	{	
+		somGol();
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall(2);
@@ -361,6 +373,7 @@ function ballPhysics()
 	
 	if (ball.position.x >= field640/2)
 	{	
+		somGol();
 		score1++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall(1);
@@ -369,10 +382,12 @@ function ballPhysics()
 	
 	if (ball.position.y <= -field360/2)
 	{
+		somParede();
 		ballDirY = -ballDirY;
 	}	
 	if (ball.position.y >= field360/2)
 	{
+		somParede();
 		ballDirY = -ballDirY;
 	}
 	
@@ -393,6 +408,7 @@ function ball2Physics()
 {
 	if (ball2.position.x <= -field640/2)
 	{	
+somGol();
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall2(2);
@@ -401,6 +417,7 @@ function ball2Physics()
 	
 	if (ball2.position.x >= field640/2)
 	{	
+somGol();
 		score1++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall2(1);
@@ -409,10 +426,12 @@ function ball2Physics()
 	
 	if (ball2.position.y <= -field360/2)
 	{
+		somParede();
 		ball2DirY = -ball2DirY;
 	}	
 	if (ball2.position.y >= field360/2)
 	{
+		somParede();
 		ball2DirY = -ball2DirY;
 	}
 	
@@ -433,6 +452,7 @@ function ball3Physics()
 {
 	if (ball3.position.x <= -field640/2)
 	{	
+somGol();
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall3(2);
@@ -441,6 +461,7 @@ function ball3Physics()
 	
 	if (ball3.position.x >= field640/2)
 	{	
+somGol();
 		score1++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall3(1);
@@ -449,10 +470,12 @@ function ball3Physics()
 	
 	if (ball3.position.y <= -field360/2)
 	{
+		somParede();
 		ball3DirY = -ball3DirY;
 	}	
 	if (ball3.position.y >= field360/2)
 	{
+		somParede();
 		ball3DirY = -ball3DirY;
 	}
 	
@@ -473,6 +496,7 @@ function ball4Physics()
 {
 	if (ball4.position.x <= -field640/2)
 	{	
+somGol();
 		score2++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall4(2);
@@ -481,6 +505,7 @@ function ball4Physics()
 	
 	if (ball4.position.x >= field640/2)
 	{	
+somGol();
 		score1++;
 		document.getElementById("scores").innerHTML = score1 + "-" + score2;
 		resetBall4(1);
@@ -489,10 +514,12 @@ function ball4Physics()
 	
 	if (ball4.position.y <= -field360/2)
 	{
+		somParede();
 		ball4DirY = -ball4DirY;
 	}	
 	if (ball4.position.y >= field360/2)
 	{
+		somParede();
 		ball4DirY = -ball4DirY;
 	}
 	
@@ -662,6 +689,7 @@ function paddlePhysics()
 		{
 			if (ballDirX < 0)
 			{
+				somColisao();
 				ballDirX = -ballDirX;
 				ballDirY -= paddle1DirY * 0.7;
 			}
@@ -676,6 +704,7 @@ function paddlePhysics()
 		{
 			if (ball2DirX < 0)
 			{
+				somColisao();
 				ball2DirX = -ball2DirX;
 				ball2DirY -= paddle1DirY * 0.7;
 			}
@@ -690,6 +719,7 @@ function paddlePhysics()
 		{
 			if (ball3DirX < 0)
 			{
+				somColisao();
 				ball3DirX = -ball3DirX;
 				ball3DirY -= paddle1DirY * 0.7;
 			}
@@ -704,6 +734,7 @@ function paddlePhysics()
 		{
 			if (ball4DirX < 0)
 			{
+				somColisao();
 				ball4DirX = -ball4DirX;
 				ball4DirY -= paddle1DirY * 0.7;
 			}
@@ -719,6 +750,7 @@ function paddlePhysics()
 		{
 			if (ballDirX > 0)
 			{
+				somColisao();
 				ballDirX = -ballDirX;
 				ballDirY -= paddle2DirY * 0.7;
 			}
@@ -733,6 +765,7 @@ function paddlePhysics()
 		{
 			if (ball2DirX > 0)
 			{
+				somColisao();
 				ball2DirX = -ball2DirX;
 				ball2DirY -= paddle2DirY * 0.7;
 			}
@@ -747,6 +780,7 @@ function paddlePhysics()
 		{
 			if (ball3DirX > 0)
 			{
+				somColisao();
 				ball3DirX = -ball3DirX;
 				ball3DirY -= paddle2DirY * 0.7;
 			}
@@ -761,6 +795,7 @@ function paddlePhysics()
 		{
 			if (ball4DirX > 0)
 			{
+				somColisao();
 				ball4DirX = -ball4DirX;
 				ball4DirY -= paddle2DirY * 0.7;
 			}
@@ -922,4 +957,29 @@ function setCam(ganha) {
 		cima2=87;
 		baix2=83;
 	}
+}
+
+function somGol(){
+	audioLoader.load( 'sounds/goal.ogg', function( buffer ) {
+		sound.setBuffer( buffer );
+		sound.setLoop( false );
+		sound.setVolume( 0.5 );
+		sound.play();
+	});
+}
+function somParede(){
+	audioLoader.load( 'sounds/edge.ogg', function( buffer ) {
+		sound.setBuffer( buffer );
+		sound.setLoop( false );
+		sound.setVolume( 0.5 );
+		sound.play();
+	});
+}
+function somColisao(){
+	audioLoader.load( 'sounds/hit.ogg', function( buffer ) {
+		sound.setBuffer( buffer );
+		sound.setLoop( false );
+		sound.setVolume( 0.5 );
+		sound.play();
+	});
 }
